@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Description - Tiger</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid red;
+    }
+
+    h2 {
+      color: red;
+      text-align: center;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    label {
+      background-color: #222;
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      color: white;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid red;
+      background-color: #111;
+      color: #fff;
+      padding: 10px;
+      resize: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #cc0000;
+    }
+
+    .footer {
+      text-align: center;
+      color: red;
+      margin-top: 40px;
+    }
+
+    .profile-card {
+      border: 1px solid red;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+      background-color: rgba(255, 0, 0, 0.1);
+    }
+
+    .profile-card h3 {
+      color: red;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-card p {
+      margin: 5px 0;
+    }
+
+    .profile-card a {
+      color: #ff4d4d;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .ig-icon {
+      width: 20px;
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 6px;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Qualities You Look For ❤️</h2>
+
+    <form id="descForm">
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="traits" value="Confident"> Confident</label>
+        <label><input type="checkbox" name="traits" value="Funny"> Funny</label>
+        <label><input type="checkbox" name="traits" value="Good listener"> Good listener</label>
+        <label><input type="checkbox" name="traits" value="Smart"> Smart</label>
+        <label><input type="checkbox" name="traits" value="Creative"> Creative</label>
+        <label><input type="checkbox" name="traits" value="Respectful"> Respectful</label>
+        <label><input type="checkbox" name="traits" value="Ambitious"> Ambitious</label>
+        <label><input type="checkbox" name="traits" value="Romantic"> Romantic</label>
+        <label><input type="checkbox" name="traits" value="Supportive"> Supportive</label>
+        <label><input type="checkbox" name="traits" value="Adventurous"> Adventurous</label>
+      </div>
+
+      <textarea id="description" placeholder="Write something about someone you like..." required></textarea>
+      <button type="submit">Find Matches</button>
+    </form>
+
+    <div id="results" style="margin-top: 20px;"></div>
+  </div>
+
+  <div class="footer">Created by Tiger 🐅</div>
+
+  <script>
+    const profiles = [
+      {
+        name: "she_is_tawanah",
+        instagram: "https://instagram.com/she_is_tawanah",
+        traits: ["Confident", "Smart", "Supportive", "Romantic", "Respectful"],
+        vibe: "Strong, romantic, and supportive — she brings peace and passion ❤️‍🔥"
+      },
+      {
+        name: "nyl_.iram",
+        instagram: "https://instagram.com/nyl_.iram",
+        traits: ["Creative", "Funny", "Adventurous", "Good listener"],
+        vibe: "Creative and funny — always down for something spontaneous 🎨✨"
+      },
+      {
+        name: "cara_mia.a",
+        instagram: "https://instagram.com/cara_mia.a",
+        traits: ["Smart", "Romantic", "Confident", "Ambitious"],
+        vibe: "Brains, beauty, and ambition. She knows what she wants 💋📚"
+      },
+      {
+        name: "kimberlll_y",
+        instagram: "https://instagram.com/kimberlll_y",
+        traits: ["Good listener", "Supportive", "Respectful"],
+        vibe: "Genuinely kind and always there for you — deep vibes only 💖"
+      },
+      {
+        name: "c_i_a_n_28",
+        instagram: "https://instagram.com/c_i_a_n_28",
+        traits: ["Adventurous", "Funny", "Creative", "Romantic"],
+        vibe: "Spontaneous energy, real fun, and romantic charm 🎢💘"
+      }
+    ];
+
+    document.getElementById('descForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const checkboxes = document.querySelectorAll('input[name="traits"]:checked');
+      const selectedTraits = Array.from(checkboxes).map(cb => cb.value);
+      const description = document.getElementById('description').value;
+
+      localStorage.setItem('datingPrefs', JSON.stringify({ traits: selectedTraits, note: description }));
+
+      const matches = profiles.filter(profile =>
+        selectedTraits.some(trait => profile.traits.includes(trait))
+      );
+
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if (matches.length > 0) {
+        resultsDiv.innerHTML = `<h3>🔥 You might vibe with these:</h3>`;
+        matches.forEach(profile => {
+          const card = document.createElement('div');
+          card.classList.add('profile-card');
+          card.innerHTML = `
+            <h3>
+              <a href="${profile.instagram}" target="_blank" style="text-decoration: none; color: red;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" 
+                     alt="IG" class="ig-icon">
+                @${profile.name}
+              </a>
+            </h3>
+            <p>${profile.vibe}</p>
+            <p><a href="${profile.instagram}" target="_blank">View Profile & DM 💌</a></p>
+          `;
+          resultsDiv.appendChild(card);
+        });
+      } else {
+        resultsDiv.innerHTML = `<p>No perfect matches found, but your person is out there 💘</p>`;
+      }
+
+      document.getElementById('descForm').reset();
+    });
+  </script>
+
+</body>
+</html>
